@@ -1,4 +1,5 @@
 package com.example.ESayur.controller;
+import com.example.ESayur.form.UserForm;
 import com.example.ESayur.model.User;
 import com.example.ESayur.repository.UserRepository;
 import io.swagger.annotations.Api;
@@ -27,25 +28,31 @@ public class UserController {
 
     @ApiOperation("Create User Pembeli")
     @PostMapping("/pembeli")
-    public User createUser(@Valid @RequestBody User user) {
-        User userdata = userRepository.findByPhone(user.getPhoneNumber());
+    public User createUser(@Valid @RequestBody UserForm userForm) {
+        User userdata = userRepository.findByPhone(userForm.getPhoneNumber());
         if(userdata !=null){
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Data Exist");
         }else{
-            user.setLevel("pembeli");
-            return userRepository.save(user);
+            User userData = new User();
+            userData.setPhoneNumber(userForm.getPhoneNumber());
+            userData.setFullName(userForm.getFullName());
+            userData.setLevel("pembeli");
+            return userRepository.save(userData);
         }
     }
 
     @ApiOperation("Create Tukang Sayur")
     @PostMapping("/grobak")
-    public User createUserGrobak(@Valid @RequestBody User user) {
-        User userdata = userRepository.findByPhone(user.getPhoneNumber());
+    public User createUserGrobak(@Valid @RequestBody UserForm userForm) {
+        User userdata = userRepository.findByPhone(userForm.getPhoneNumber());
         if(userdata !=null){
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Data Exist");
         }else{
-            user.setLevel("grobak");
-            return userRepository.save(user);
+            User userData = new User();
+            userData.setPhoneNumber(userForm.getPhoneNumber());
+            userData.setFullName(userForm.getFullName());
+            userData.setLevel("pembeli");
+            return userRepository.save(userData);
         }
     }
 
@@ -61,10 +68,9 @@ public class UserController {
     }
     @ApiOperation("Update User By ID")
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable(value = "id") Long idUser, @Valid @RequestBody User user) {
+    public User updateUser(@PathVariable(value = "id") Long idUser, @RequestBody UserForm userForm) {
         User userdata = userRepository.findById(idUser).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        userdata.setFullName((user.getFullName()));
-        userdata.setLevel(user.getLevel());
+        userdata.setFullName(userForm.getFullName());
         return userRepository.save(userdata);
     }
 

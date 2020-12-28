@@ -21,7 +21,6 @@ public class User {
 
     private String level;
 
-    @NotBlank()
     private String phoneNumber;
 
     @Column(nullable = false, updatable = false)
@@ -47,8 +46,9 @@ public class User {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public User setFullName(String fullName) {
         this.fullName = fullName;
+        return null;
     }
 
 
@@ -70,7 +70,6 @@ public class User {
 
 
     public Date getCreatedAt() {
-        System.out.println(createdAt);
         return createdAt;
     }
 
